@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/kaw393939/is373_devops.git"
+    "url": "git+ssh://git@github.com:PD438/is373_devops_playwright.git"
   },
-  "author": "Keith Williams",
+  "author": "Paulo Duarte and Nicholas Melito",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kaw393939/is373_devops/issues"
+    "url": "https://github.com/PD438/is373_devops_playwright/issues"
   },
-  "homepage": "https://github.com/kaw393939/is373_devops#readme",
+  "homepage": "https://github.com/PD438/is373_devops_playwright#readme",
   "devDependencies": {
     "@playwright/test": "^1.47.2",
     "@types/node": "^22.7.0",
