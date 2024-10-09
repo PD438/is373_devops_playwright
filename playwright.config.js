@@ -1,48 +1,68 @@
-const { devices } = require('@playwright/test');
+import { defineConfig, devices } from '@playwright/test';
 
-module.exports = {
-  // Automatically start the Express server before running tests
-  webServer: {
-    command: 'npm run start',           // Command to start the server (Ensure it matches your script)
-    port: 3000,                         // Port where the server will be running
-    reuseExistingServer: !process.env.CI,  // Reuse the server unless in CI environment
-    timeout: 120 * 1000,                // Allow up to 2 minutes for the server to start
-  },
-
-  // Global test settings
+export default defineConfig({
+  testDir: './tests',
+  /* Run tests in files in parallel */
+  fullyParallel: true,
+  /* Fail the build on CI if you accidentally left test.only in the source code. */
+  forbidOnly: !!process.env.CI,
+  /* Retry on CI only */
+  retries: process.env.CI ? 2 : 0,
+  /* Opt out of parallel tests on CI. */
+  workers: process.env.CI ? 1 : undefined,
+  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  reporter: 'html',
+  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    baseURL: 'http://localhost:3000',   // Base URL for all tests
-    headless: true,                     // Run tests in headless mode for CI efficiency
-    screenshot: 'only-on-failure',      // Capture screenshots on failure
-    video: 'retain-on-failure',         // Capture video on failure
-    trace: 'on-first-retry',            // Record a trace on first retry to assist debugging
+    /* Base URL to use in actions like `await page.goto('/')`. */
+    baseURL: 'http://127.0.0.1:4000',
+
+    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    trace: 'on-first-retry',
   },
 
-  // Browsers to run tests against
+  /* Configure projects for major browsers */
   projects: [
     {
-      name: 'Desktop Chrome',
+      name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+
     {
-      name: 'Desktop Firefox',
+      name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
+
     {
-      name: 'Desktop Safari',
+      name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
+
+    /* Test against mobile viewports. */
+    // {
+    //   name: 'Mobile Chrome',
+    //   use: { ...devices['Pixel 5'] },
+    // },
+    // {
+    //   name: 'Mobile Safari',
+    //   use: { ...devices['iPhone 12'] },
+    // },
+
+    /* Test against branded browsers. */
+    // {
+    //   name: 'Microsoft Edge',
+    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
+    // },
+    // {
+    //   name: 'Google Chrome',
+    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+    // },
   ],
 
-  // Reporter configuration
-  reporter: [
-    ['list'],                           // Console reporter: readable list output
-    ['json', { outputFile: 'results/test-results.json' }],  // Store JSON results in results folder
-  ],
-
-  // Retry failed tests once before marking them as failed
-  retries: 1,
-
-  // Limit the maximum time allowed for a single test
-  timeout: 60 * 1000,  // 1 minute per test
-};
+  /* Run your local dev server before starting the tests */
+  // webServer: {
+  //   command: 'npm run start',
+  //   url: 'http://127.0.0.1:3000',
+  //   reuseExistingServer: !process.env.CI,
+  // },
+});
